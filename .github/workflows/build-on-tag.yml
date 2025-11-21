@@ -8,6 +8,10 @@ on:
 env:
   DOCKER_PLATFORMS: linux/amd64  # 只构建 x86_64 平台，适合 NAS 使用
 
+permissions:
+  contents: read
+  packages: write
+  
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
