@@ -6,10 +6,7 @@ on:
       - "*"  # 匹配所有 tag
 
 env:
-  DOCKER_PLATFORMS: |
-    linux/amd64
-    linux/arm/v7
-    linux/arm64
+  DOCKER_PLATFORMS: linux/amd64  # 只构建 x86_64 平台，适合 NAS 使用
 
 jobs:
   build-and-push:
@@ -20,17 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: ${{ env.DOCKER_PLATFORMS }}
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           version: latest
           install: true
-          platforms: ${{ env.DOCKER_PLATFORMS }}
 
       - name: Extract tag name
         id: tag
@@ -63,7 +54,7 @@ jobs:
         with:
           context: .
           file: ./scripts/Dockerfile
-          platforms: ${{ env.DOCKER_PLATFORMS }}
+          platforms: linux/amd64
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/mymemos:${{ steps.tag.outputs.TAG_NAME }}
